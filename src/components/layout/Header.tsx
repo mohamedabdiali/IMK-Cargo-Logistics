@@ -4,11 +4,12 @@ import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
+import { COMPANY_CONTACT } from "@/constants/operations";
 
 const navItems = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/services" },
-  { label: "Track Shipment", href: "/track" },
+  { label: "Shipment Tracking", href: "/track" },
   { label: "About Us", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
@@ -41,11 +42,11 @@ export function Header() {
           <div className="flex items-center gap-6">
             <span className="flex items-center gap-2">
               <Phone className="h-3.5 w-3.5 text-accent" />
-              +971 58 301 6522
+              {COMPANY_CONTACT.phoneLine}
             </span>
             <span className="flex items-center gap-2">
               <Globe className="h-3.5 w-3.5 text-accent" />
-              info@ibrahimmuhammad.com
+              {COMPANY_CONTACT.supportEmail}
             </span>
           </div>
           <div className="flex items-center gap-4">

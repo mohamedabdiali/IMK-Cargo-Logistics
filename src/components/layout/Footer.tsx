@@ -1,5 +1,6 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin, Package } from "lucide-react";
+import { COMPANY_CONTACT } from "@/constants/operations";
 
 export function Footer() {
   return (
@@ -74,7 +75,7 @@ export function Footer() {
                 </div>
                 <div>
                   <p className="text-white text-xs font-black uppercase mb-1">Office Location</p>
-                  <span className="text-[13px]">Mogadishu, Somalia</span>
+                  <span className="text-[13px]">{COMPANY_CONTACT.officeLocation}</span>
                 </div>
               </li>
               <li className="flex items-start gap-4 group">
@@ -83,7 +84,7 @@ export function Footer() {
                 </div>
                 <div>
                   <p className="text-white text-xs font-black uppercase mb-1">Phone Line</p>
-                  <span className="text-[13px]">+252 61 XXXXXXX</span>
+                  <span className="text-[13px]">{COMPANY_CONTACT.phoneLine}</span>
                 </div>
               </li>
               <li className="flex items-start gap-4 group">
@@ -92,7 +93,7 @@ export function Footer() {
                 </div>
                 <div>
                   <p className="text-white text-xs font-black uppercase mb-1">Email Support</p>
-                  <span className="text-[13px]">info@ibrahimmuhammad.com</span>
+                  <span className="text-[13px]">{COMPANY_CONTACT.supportEmail}</span>
                 </div>
               </li>
             </ul>
@@ -106,7 +107,7 @@ export function Footer() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="space-y-1">
               <p className="text-sm font-bold text-slate-300">
-                © 2026 IBRAHIM MUHAMMAD Clearing & Forwarding LLC.
+                (c) 2026 IBRAHIM MUHAMMAD Clearing & Forwarding LLC.
               </p>
               <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">
                 Crafted by <span className="text-accent/80">PRIMMESISC TECHNOLOGY SOLUTION COMPANY</span>
@@ -123,3 +124,5 @@ export function Footer() {
     </footer>
   );
 }
+
+

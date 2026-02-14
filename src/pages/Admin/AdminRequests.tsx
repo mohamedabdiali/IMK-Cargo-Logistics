@@ -15,17 +15,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 import type { RequestStage } from "@/types/admin";
 import { Search, FilePlus2, CheckCheck, ArrowRightLeft } from "lucide-react";
-
-const stages: RequestStage[] = [
-  "Requested",
-  "Quoted",
-  "Awaiting Approval",
-  "Booked",
-  "In Transit",
-  "Customs",
-  "Out for Delivery",
-  "Received",
-];
+import { REQUEST_STAGE_SEQUENCE } from "@/constants/operations";
 
 export default function AdminRequests() {
   const {
@@ -92,7 +82,7 @@ export default function AdminRequests() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Stages</SelectItem>
-              {stages.map((stage) => (
+              {REQUEST_STAGE_SEQUENCE.map((stage) => (
                 <SelectItem key={stage} value={stage}>{stage}</SelectItem>
               ))}
             </SelectContent>
@@ -146,7 +136,7 @@ export default function AdminRequests() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {stages.map((stage) => (
+                        {REQUEST_STAGE_SEQUENCE.map((stage) => (
                           <SelectItem key={stage} value={stage}>{stage}</SelectItem>
                         ))}
                       </SelectContent>

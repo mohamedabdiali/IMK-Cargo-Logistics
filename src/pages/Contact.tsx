@@ -7,22 +7,24 @@ import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { toast } from "@/hooks/use-toast";
+import { COMPANY_CONTACT } from "@/constants/operations";
+import { WhatsAppHeroCTA } from "@/components/common/WhatsAppHeroCTA";
 
 const contactInfo = [
   {
     icon: MapPin,
-    title: "Headquarters",
-    details: ["Dubai, United Arab Emirates"],
+    title: "Office Location",
+    details: [COMPANY_CONTACT.officeLocation],
   },
   {
     icon: Phone,
-    title: "Phone",
-    details: ["+971 58 301 6522"],
+    title: "Phone Line",
+    details: [COMPANY_CONTACT.phoneLine],
   },
   {
     icon: Mail,
     title: "Email",
-    details: ["info@imklogistics.com"],
+    details: [COMPANY_CONTACT.supportEmail],
   },
   {
     icon: Clock,
@@ -69,6 +71,9 @@ export default function Contact() {
               <p className="text-xl text-white/90 max-w-2xl mx-auto font-semibold font-subtitle mt-6">
                 Direct access to our logistics architects. We're here to solve your most complex shipping challenges 24/7.
               </p>
+              <div className="mt-8">
+                <WhatsAppHeroCTA contextLabel="Contact page hero" />
+              </div>
             </ScrollReveal>
           </div>
         </section>

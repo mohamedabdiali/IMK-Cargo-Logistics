@@ -17,8 +17,7 @@ import type { ShipmentStatus } from "@/data/trackingData";
 import type { ShipmentMode } from "@/types/admin";
 import { Search, Trash2, Truck, Plus } from "lucide-react";
 import { useLogisticsControl } from "@/context/LogisticsControlContext";
-
-const shipmentStatuses: ShipmentStatus[] = ["Pending", "In Transit", "Customs", "Delivered"];
+import { SHIPMENT_STATUS_LABELS, SHIPMENT_STATUS_SEQUENCE } from "@/constants/operations";
 const shipmentModes: ShipmentMode[] = ["Air", "Sea", "Road"];
 
 const shipmentStatusClass: Record<ShipmentStatus, string> = {
@@ -26,13 +25,6 @@ const shipmentStatusClass: Record<ShipmentStatus, string> = {
   "In Transit": "bg-blue-100 text-blue-700 border-blue-200",
   Customs: "bg-amber-100 text-amber-700 border-amber-200",
   Delivered: "bg-green-100 text-green-700 border-green-200",
-};
-
-const shipmentStatusLabel: Record<ShipmentStatus, string> = {
-  Pending: "Booked",
-  "In Transit": "In Transit",
-  Customs: "Customs",
-  Delivered: "Delivered",
 };
 
 export default function AdminShipments() {
@@ -219,9 +211,9 @@ export default function AdminShipments() {
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
-                  {shipmentStatuses.map((status) => (
+                  {SHIPMENT_STATUS_SEQUENCE.map((status) => (
                     <SelectItem key={status} value={status}>
-                      {shipmentStatusLabel[status]}
+                      {SHIPMENT_STATUS_LABELS[status]}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -328,7 +320,7 @@ export default function AdminShipments() {
 
                   <div className="text-right">
                     <Badge variant="outline" className={shipmentStatusClass[shipment.status]}>
-                      {shipmentStatusLabel[shipment.status]}
+                      {SHIPMENT_STATUS_LABELS[shipment.status]}
                     </Badge>
                     {shipment.riskLevel && (
                       <p className="text-xs text-muted-foreground mt-1">Risk: {shipment.riskLevel}</p>
@@ -343,7 +335,7 @@ export default function AdminShipments() {
                         updateShipmentStatus(shipment.trackingNumber, status);
                         toast({
                           title: "Shipment updated",
-                          description: `${shipment.trackingNumber} is now ${shipmentStatusLabel[status]}.`,
+                          description: `${shipment.trackingNumber} is now ${SHIPMENT_STATUS_LABELS[status]}.`,
                         });
                       }}
                     >
@@ -351,9 +343,9 @@ export default function AdminShipments() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {shipmentStatuses.map((status) => (
+                        {SHIPMENT_STATUS_SEQUENCE.map((status) => (
                           <SelectItem key={status} value={status}>
-                            {shipmentStatusLabel[status]}
+                            {SHIPMENT_STATUS_LABELS[status]}
                           </SelectItem>
                         ))}
                       </SelectContent>

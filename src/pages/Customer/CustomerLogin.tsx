@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { Lock, Mail, UserRound } from "lucide-react";
+import { WhatsAppHeroCTA } from "@/components/common/WhatsAppHeroCTA";
 
 type AuthMode = "login" | "register";
 
@@ -78,10 +79,12 @@ export default function CustomerLogin() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md">
+      <div className="w-full max-w-md space-y-4">
+        <WhatsAppHeroCTA contextLabel="Customer login page" theme="light" />
+        <Card className="w-full max-w-md">
         <CardHeader className="space-y-3">
           <CardTitle className="text-2xl font-bold text-center">
-            {mode === "login" ? "Customer Login" : "Create Customer Account"}
+            {mode === "login" ? "Customer Portal Login" : "Create Customer Account"}
           </CardTitle>
           <CardDescription className="text-center">
             {mode === "login"
@@ -202,6 +205,7 @@ export default function CustomerLogin() {
           </div>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }

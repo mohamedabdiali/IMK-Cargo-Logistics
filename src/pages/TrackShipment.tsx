@@ -3,6 +3,7 @@ import { Footer } from "@/components/layout/Footer";
 import { TrackingSection } from "@/components/home/TrackingSection";
 import { Package, Shield, Clock, Globe } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { WhatsAppHeroCTA } from "@/components/common/WhatsAppHeroCTA";
 
 const TrackShipment = () => {
     return (
@@ -18,8 +19,11 @@ const TrackShipment = () => {
                                 <Package className="h-3 w-3" />
                                 Real-Time Visibility
                             </div>
-                            <h1 className="text-5xl md:text-7xl font-black tracking-tight text-white mt-4">Track Your Shipment</h1>
+                            <h1 className="text-5xl md:text-7xl font-black tracking-tight text-white mt-4">Shipment Tracking</h1>
                             <p className="text-xl text-white/70 max-w-xl mx-auto font-subtitle font-semibold">Monitor your cargo's journey across our global network.</p>
+                            <div className="mt-8">
+                                <WhatsAppHeroCTA contextLabel="Shipment tracking hero" />
+                            </div>
                         </ScrollReveal>
                     </div>
                 </section>

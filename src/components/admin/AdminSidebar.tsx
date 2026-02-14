@@ -12,8 +12,10 @@ import {
   LayoutDashboard,
   BellRing,
   Map,
+  MapPin,
   Network,
   LogOut,
+  Phone,
   ShieldCheck,
   Smartphone,
   Truck,
@@ -25,32 +27,28 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
 import { useAdminData } from "@/context/AdminDataContext";
 import { toast } from "@/hooks/use-toast";
-
-const quickPanelItems = [
-  { icon: BriefcaseBusiness, label: "View Full Operations Board", path: "/admin/orders" },
-  { icon: ShieldCheck, label: "Open Customs Control", path: "/admin/customs" },
-];
+import { ADMIN_LABELS, COMPANY_CONTACT, buildWhatsAppChatUrl } from "@/constants/operations";
 
 const flowItems = [
-  { icon: ClipboardCheck, label: "Customer Requests", path: "/admin/requests" },
-  { icon: BriefcaseBusiness, label: "Operations Orders", path: "/admin/orders" },
-  { icon: Truck, label: "Shipment Tracking", path: "/admin/shipments" },
-  { icon: ShieldCheck, label: "Customs Clearance", path: "/admin/customs" },
-  { icon: Warehouse, label: "Warehouse Operations", path: "/admin/warehouse" },
-  { icon: Car, label: "Fleet Control", path: "/admin/fleet" },
-  { icon: FileText, label: "Billing & Payments", path: "/admin/billing" },
-  { icon: BellRing, label: "Alerts Center", path: "/admin/alerts" },
-  { icon: Workflow, label: "End-to-End Process", path: "/admin/process" },
+  { icon: ClipboardCheck, label: ADMIN_LABELS.customerRequests, path: "/admin/requests" },
+  { icon: BriefcaseBusiness, label: ADMIN_LABELS.operationsOrders, path: "/admin/orders" },
+  { icon: Truck, label: ADMIN_LABELS.shipmentTracking, path: "/admin/shipments" },
+  { icon: ShieldCheck, label: ADMIN_LABELS.customsClearance, path: "/admin/customs" },
+  { icon: Warehouse, label: ADMIN_LABELS.warehouseOperations, path: "/admin/warehouse" },
+  { icon: Car, label: ADMIN_LABELS.fleetControl, path: "/admin/fleet" },
+  { icon: FileText, label: ADMIN_LABELS.billingAndPayments, path: "/admin/billing" },
+  { icon: BellRing, label: ADMIN_LABELS.alertsCenter, path: "/admin/alerts" },
+  { icon: Workflow, label: ADMIN_LABELS.endToEndProcess, path: "/admin/process" },
 ];
 
 const operationsItems = [
-  { icon: LayoutDashboard, label: "Cargo Control Tower", path: "/admin" },
-  { icon: BadgeCheck, label: "Compliance Engine", path: "/admin/compliance" },
-  { icon: Network, label: "Carrier Connections", path: "/admin/carriers" },
-  { icon: Map, label: "Route Optimization", path: "/admin/routes" },
-  { icon: BarChart3, label: "Operations Intelligence", path: "/admin/intelligence" },
-  { icon: Smartphone, label: "Mobile Ops", path: "/admin/mobile" },
-  { icon: Users, label: "Customer Accounts", path: "/admin/clients" },
+  { icon: LayoutDashboard, label: ADMIN_LABELS.cargoControlTower, path: "/admin" },
+  { icon: BadgeCheck, label: ADMIN_LABELS.complianceEngine, path: "/admin/compliance" },
+  { icon: Network, label: ADMIN_LABELS.carrierConnections, path: "/admin/carriers" },
+  { icon: Map, label: ADMIN_LABELS.routeOptimization, path: "/admin/routes" },
+  { icon: BarChart3, label: ADMIN_LABELS.operationsIntelligence, path: "/admin/intelligence" },
+  { icon: Smartphone, label: ADMIN_LABELS.mobileOps, path: "/admin/mobile" },
+  { icon: Users, label: ADMIN_LABELS.customerAccounts, path: "/admin/clients" },
 ];
 
 export function AdminSidebar() {
@@ -115,7 +113,7 @@ export function AdminSidebar() {
             <Anchor className="h-5 w-5" />
           </div>
           <div>
-            <h1 className="text-lg font-semibold leading-tight">Cargo Control Tower</h1>
+            <h1 className="text-lg font-semibold leading-tight">{ADMIN_LABELS.cargoControlTower}</h1>
             <p className="text-xs text-slate-400 mt-0.5">Clearing & Forwarding Platform</p>
           </div>
         </div>
@@ -133,30 +131,33 @@ export function AdminSidebar() {
               </span>
             )}
           </div>
-          <p className="px-4 pb-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500/80">
-            Shortcuts
-          </p>
-          <ul className="space-y-2 mb-4">
-            {quickPanelItems.map((item) => {
-              const isActive = isPathActive(item.path);
-              return (
-                <li key={`quick-${item.path}`}>
-                  <Link
-                    to={item.path}
-                    className={cn(
-                      "flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all",
-                      isActive
-                        ? "bg-slate-800 text-emerald-300 font-medium"
-                        : "text-slate-300 hover:bg-slate-800/60 hover:text-white"
-                    )}
-                  >
-                    <item.icon className="h-4 w-4" />
-                    {item.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          <div className="mb-4 rounded-xl border border-slate-700/70 bg-slate-900/30 px-4 py-3">
+            <div className="space-y-3">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500/80">
+                  Office Location
+                </p>
+                <p className="mt-1 flex items-center gap-2 text-sm text-slate-200">
+                  <MapPin className="h-4 w-4 text-emerald-300" />
+                  {COMPANY_CONTACT.officeLocation}
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500/80">
+                  Phone Line
+                </p>
+                <a
+                  href={buildWhatsAppChatUrl("Admin panel contact line")}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-1 inline-flex items-center gap-2 text-sm font-medium text-emerald-300 hover:text-emerald-200"
+                >
+                  <Phone className="h-4 w-4" />
+                  {COMPANY_CONTACT.phoneLine}
+                </a>
+              </div>
+            </div>
+          </div>
           <p className="px-4 pb-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500/80">
             End-to-End Flow
           </p>

@@ -1,8 +1,9 @@
-import { Package, Phone, Ship, Plane, Truck, ArrowRight, Globe } from "lucide-react";
+import { Package, Ship, Plane, Truck, ArrowRight, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { WhatsAppHeroCTA } from "@/components/common/WhatsAppHeroCTA";
 
 const slides = [
   {
@@ -181,6 +182,8 @@ export function HeroSection() {
                   </Button>
                 </Link>
               </div>
+
+              <WhatsAppHeroCTA contextLabel="Home hero section" className="pt-2" />
 
               {/* Quick Stats */}
               <div className="grid grid-cols-3 gap-4 pt-6 mt-6 border-t border-white/20">

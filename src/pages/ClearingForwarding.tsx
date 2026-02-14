@@ -16,6 +16,8 @@ import { toast } from "@/hooks/use-toast";
 import { useAdminData } from "@/context/AdminDataContext";
 import type { ShipmentMode } from "@/types/admin";
 import { useLogisticsControl } from "@/context/LogisticsControlContext";
+import { COMPANY_CONTACT } from "@/constants/operations";
+import { WhatsAppHeroCTA } from "@/components/common/WhatsAppHeroCTA";
 
 const services = [
   {
@@ -207,6 +209,9 @@ export default function ClearingForwarding() {
                 Expert Consultation
               </Button>
             </div>
+            <div className="mt-8">
+              <WhatsAppHeroCTA contextLabel="Clearing and forwarding hero" />
+            </div>
           </div>
         </section>
 
@@ -332,7 +337,7 @@ export default function ClearingForwarding() {
                       <Input
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        placeholder="+971 XX XXX XXXX"
+                        placeholder={COMPANY_CONTACT.phoneLine}
                         className="h-14 bg-white/10 border-white/20 rounded-xl text-white placeholder:text-white/40 font-bold px-6 focus:ring-accent focus:border-accent transition-all shadow-inner"
                       />
                     </div>
@@ -497,7 +502,7 @@ export default function ClearingForwarding() {
               <div className="flex flex-wrap justify-center gap-4">
                 <Button size="lg" className="h-14 px-8 rounded-full bg-primary text-white font-black uppercase tracking-widest text-[10px] gap-3 hover:bg-accent transition-colors shadow-xl shadow-primary/20">
                   <Phone className="h-4 w-4" />
-                  +971 58 301 6522
+                  {COMPANY_CONTACT.phoneLine}
                 </Button>
                 <Button variant="outline" size="lg" className="h-14 px-8 rounded-full border-2 border-primary text-primary font-black uppercase tracking-widest text-[10px] gap-3 hover:bg-primary hover:text-white transition-all">
                   <Mail className="h-4 w-4" />

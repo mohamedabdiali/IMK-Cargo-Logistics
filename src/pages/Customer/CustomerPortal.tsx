@@ -11,6 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import { Search, MessageSquare, FileText, Bell, Brain, CreditCard } from "lucide-react";
+import { SHIPMENT_STATUS_LABELS } from "@/constants/operations";
+import { WhatsAppHeroCTA } from "@/components/common/WhatsAppHeroCTA";
 
 export default function CustomerPortal() {
   const { user } = useAuth();
@@ -86,6 +88,9 @@ export default function CustomerPortal() {
           <p className="text-muted-foreground">
             Dashboard, tracking timeline, documents, billing, notifications, and support in one place.
           </p>
+          <div className="mt-4">
+            <WhatsAppHeroCTA contextLabel="Customer portal overview" theme="light" />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -127,11 +132,11 @@ export default function CustomerPortal() {
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
             <Card className="border-border/60">
               <CardHeader>
-                <CardTitle className="text-lg">Shipment Timeline - {selectedShipment.trackingNumber}</CardTitle>
+                <CardTitle className="text-lg">Shipment Tracking Timeline - {selectedShipment.trackingNumber}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
                 <p className="text-sm text-muted-foreground">
-                  {selectedShipment.origin} to {selectedShipment.destination} • Status {selectedShipment.status}
+                  {selectedShipment.origin} to {selectedShipment.destination} | Status {SHIPMENT_STATUS_LABELS[selectedShipment.status]}
                 </p>
                 {selectedShipment.checkpoints.map((checkpoint, index) => (
                   <div key={`${checkpoint.title}-${index}`} className="rounded-md border border-border/60 p-3">
@@ -231,7 +236,7 @@ export default function CustomerPortal() {
                 <div key={invoice.id} className="rounded-md border border-border/60 p-3">
                   <p className="text-sm font-semibold">{invoice.id}</p>
                   <p className="text-xs text-muted-foreground">
-                    Total {invoice.totalAmount.toFixed(2)} {invoice.currency} • {invoice.status} • {invoice.billingPlan}
+                    Total {invoice.totalAmount.toFixed(2)} {invoice.currency} | {invoice.status} | {invoice.billingPlan}
                   </p>
                 </div>
               ))}

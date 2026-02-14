@@ -3,6 +3,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Shield, Truck, Headphones, Globe, Target, Heart, Package, ArrowRight } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { WhatsAppHeroCTA } from "@/components/common/WhatsAppHeroCTA";
 
 const features = [
   {
@@ -72,6 +73,9 @@ export default function About() {
               <p className="text-xl text-white max-w-2xl mx-auto font-semibold font-subtitle mt-6">
                 Over 15 years of excellence in connecting the world through seamless freight forwarding and customs mastery.
               </p>
+              <div className="mt-8">
+                <WhatsAppHeroCTA contextLabel="About page hero" />
+              </div>
             </ScrollReveal>
           </div>
         </section>

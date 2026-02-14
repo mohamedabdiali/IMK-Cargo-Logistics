@@ -32,16 +32,7 @@ import {
 } from "lucide-react";
 import type { JobPriority, JobStatus, ShipmentMode } from "@/types/admin";
 import { toast } from "@/hooks/use-toast";
-
-const orderStatuses: JobStatus[] = [
-  "Booked",
-  "In Transit",
-  "Customs",
-  "Out for Delivery",
-  "Delivered",
-  "Delayed",
-  "On Hold",
-];
+import { ORDER_STATUS_SEQUENCE } from "@/constants/operations";
 
 const priorities: JobPriority[] = ["Normal", "High", "Critical"];
 const modes: ShipmentMode[] = ["Air", "Sea", "Road"];
@@ -392,7 +383,7 @@ export default function AdminOrders() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Statuses</SelectItem>
-                  {orderStatuses.map((status) => (
+                  {ORDER_STATUS_SEQUENCE.map((status) => (
                     <SelectItem key={status} value={status}>
                       {status}
                     </SelectItem>
@@ -475,7 +466,7 @@ export default function AdminOrders() {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {orderStatuses.map((status) => (
+                            {ORDER_STATUS_SEQUENCE.map((status) => (
                               <SelectItem key={status} value={status}>
                                 {status}
                               </SelectItem>

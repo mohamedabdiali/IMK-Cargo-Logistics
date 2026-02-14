@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   AlertTriangle,
@@ -21,6 +22,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import type { AdminNotification, JobStatus } from "@/types/admin";
+import { ADMIN_LABELS, ORDER_STATUS_SEQUENCE, PROCESS_STAGE_CHIPS } from "@/constants/operations";
 
 const statusBadgeClasses: Record<JobStatus, string> = {
   Booked: "bg-blue-100 text-blue-700 border-blue-200",
@@ -32,15 +34,10 @@ const statusBadgeClasses: Record<JobStatus, string> = {
   "On Hold": "bg-rose-100 text-rose-700 border-rose-200",
 };
 
-const orderFlowRank: Record<JobStatus, number> = {
-  Booked: 0,
-  "In Transit": 1,
-  Customs: 2,
-  "Out for Delivery": 3,
-  Delivered: 4,
-  Delayed: 5,
-  "On Hold": 6,
-};
+const orderFlowRank = ORDER_STATUS_SEQUENCE.reduce((current, status, index) => {
+  current[status] = index;
+  return current;
+}, {} as Record<JobStatus, number>);
 
 const toTitleName = (emailOrName: string) =>
   emailOrName
@@ -89,6 +86,7 @@ const getAdminAlertPath = (notification: AdminNotification) =>
   notification.type === "New Request" ? "/admin/requests" : "/admin/orders";
 
 export default function AdminDashboard() {
+  const [activeProcessStage, setActiveProcessStage] = useState(PROCESS_STAGE_CHIPS[0].id);
   const { user } = useAuth();
   const {
     analytics,
@@ -130,9 +128,18 @@ export default function AdminDashboard() {
     day: "numeric",
     year: "numeric",
   });
+  const processStageCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    PROCESS_STAGE_CHIPS.forEach((chip) => {
+      counts[chip.id] = serviceRequests.filter((request) => chip.requestStages.includes(request.stage)).length;
+    });
+    return counts;
+  }, [serviceRequests]);
+  const activeStage = PROCESS_STAGE_CHIPS.find((chip) => chip.id === activeProcessStage) ?? PROCESS_STAGE_CHIPS[0];
   const recentAdminAlerts = adminNotifications.slice(0, 5);
-  const operationsBoardOrders = [...cargoJobs]
-    .sort((a, b) => {
+  const sortedOperationsOrders = useMemo(
+    () =>
+      [...cargoJobs].sort((a, b) => {
       const rankDiff = orderFlowRank[a.status] - orderFlowRank[b.status];
       if (rankDiff !== 0) {
         return rankDiff;
@@ -145,8 +152,17 @@ export default function AdminDashboard() {
       }
 
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    })
-    .slice(0, 6);
+      }),
+    [cargoJobs]
+  );
+  const operationsBoardOrders = useMemo(() => {
+    if (activeStage.boardStatuses.length === 0) {
+      return [];
+    }
+    return sortedOperationsOrders
+      .filter((order) => activeStage.boardStatuses.includes(order.status))
+      .slice(0, 6);
+  }, [activeStage.boardStatuses, sortedOperationsOrders]);
 
   const kpiCards = [
     {
@@ -198,7 +214,7 @@ export default function AdminDashboard() {
       iconClass: "bg-indigo-100 text-indigo-700",
     },
     {
-      title: "Customer Requests",
+      title: ADMIN_LABELS.customerRequests,
       value: awaitingRequests.toLocaleString(),
       note: "Need quotation or approval",
       noteClass: "text-slate-500",
@@ -206,7 +222,7 @@ export default function AdminDashboard() {
       iconClass: "bg-teal-100 text-teal-700",
     },
     {
-      title: "Billing & Payments",
+      title: ADMIN_LABELS.billingAndPayments,
       value: unpaidInvoices.toLocaleString(),
       note: `${openExceptions} open exceptions`,
       noteClass: unpaidInvoices > 0 ? "text-red-600" : "text-emerald-600",
@@ -220,25 +236,25 @@ export default function AdminDashboard() {
   ).length;
   const departmentLoad = [
     {
-      label: "Customs Clearance",
+      label: ADMIN_LABELS.customsClearance,
       value: clampPercent((activeCustomsCases / Math.max(1, customsEntries.length)) * 100),
       detail: `${activeCustomsCases} active files`,
       barClass: "bg-rose-500",
     },
     {
-      label: "Operations Orders",
+      label: ADMIN_LABELS.operationsOrders,
       value: clampPercent((analytics.activeJobs / Math.max(1, analytics.totalJobs)) * 100),
       detail: `${analytics.activeJobs} active orders`,
       barClass: "bg-blue-500",
     },
     {
-      label: "Warehouse Operations",
+      label: ADMIN_LABELS.warehouseOperations,
       value: clampPercent((warehouseActive / Math.max(1, warehouseRecords.length)) * 100),
       detail: `${warehouseActive} cargos in flow`,
       barClass: "bg-cyan-500",
     },
     {
-      label: "Fleet Control",
+      label: ADMIN_LABELS.fleetControl,
       value: clampPercent(analytics.fleetUtilization),
       detail: `${activeFleet} units en route`,
       barClass: "bg-emerald-500",
@@ -289,9 +305,43 @@ export default function AdminDashboard() {
 
         <main className="space-y-6 p-6 md:p-8">
           <div>
-            <h1 className="text-3xl font-semibold text-slate-900">Cargo Control Tower</h1>
+            <h1 className="text-3xl font-semibold text-slate-900">{ADMIN_LABELS.cargoControlTower}</h1>
             <p className="mt-1 text-slate-500">
               Cargo and logistics control overview for clearing, forwarding, and final delivery.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <div className="overflow-x-auto">
+              <div className="flex min-w-max items-center gap-2 pb-1">
+                {PROCESS_STAGE_CHIPS.map((chip) => {
+                  const active = chip.id === activeProcessStage;
+                  return (
+                    <button
+                      key={chip.id}
+                      type="button"
+                      onClick={() => setActiveProcessStage(chip.id)}
+                      className={cn(
+                        "inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-colors",
+                        active
+                          ? "border-cyan-300 bg-cyan-50 text-cyan-800"
+                          : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-800"
+                      )}
+                    >
+                      <span>{chip.label}</span>
+                      <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600">
+                        {processStageCounts[chip.id] ?? 0}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            <p className="text-sm text-slate-500">
+              Active process stage: <span className="font-semibold text-slate-700">{activeStage.label}</span>.{" "}
+              <Link to={activeStage.modulePath} className="font-medium text-cyan-700 hover:text-cyan-800">
+                Open stage module
+              </Link>
             </p>
           </div>
 
@@ -323,34 +373,45 @@ export default function AdminDashboard() {
                 <span className="text-sm text-slate-500">{displayDate}</span>
               </CardHeader>
               <CardContent className="p-0">
-                <div className="divide-y divide-slate-200">
-                  {operationsBoardOrders.map((order) => (
-                    <div key={order.id} className="flex items-center justify-between gap-4 px-6 py-4">
-                      <div className="flex min-w-0 items-center gap-3">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold text-slate-700">
-                          {getInitials(order.clientName)}
+                {operationsBoardOrders.length > 0 ? (
+                  <div className="divide-y divide-slate-200">
+                    {operationsBoardOrders.map((order) => (
+                      <div key={order.id} className="flex items-center justify-between gap-4 px-6 py-4">
+                        <div className="flex min-w-0 items-center gap-3">
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold text-slate-700">
+                            {getInitials(order.clientName)}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="truncate font-semibold text-slate-900">{order.clientName}</p>
+                            <p className="truncate text-sm text-slate-500">
+                              {order.id} | {order.trackingNumber} | {order.origin} to {order.destination}
+                            </p>
+                          </div>
                         </div>
-                        <div className="min-w-0">
-                          <p className="truncate font-semibold text-slate-900">{order.clientName}</p>
-                          <p className="truncate text-sm text-slate-500">
-                            {order.id} | {order.trackingNumber} | {order.origin} to {order.destination}
-                          </p>
+                        <div className="shrink-0 text-right">
+                          <p className="text-sm text-slate-500">{formatDateTime(order.createdAt)}</p>
+                          <span
+                            className={cn(
+                              "mt-1 inline-flex rounded-full border px-2.5 py-0.5 text-xs font-medium",
+                              statusBadgeClasses[order.status]
+                            )}
+                          >
+                            {order.status}
+                          </span>
                         </div>
                       </div>
-                      <div className="shrink-0 text-right">
-                        <p className="text-sm text-slate-500">{formatDateTime(order.createdAt)}</p>
-                        <span
-                          className={cn(
-                            "mt-1 inline-flex rounded-full border px-2.5 py-0.5 text-xs font-medium",
-                            statusBadgeClasses[order.status]
-                          )}
-                        >
-                          {order.status}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="px-6 py-8 text-sm text-slate-500">
+                    No operations orders are currently in the <span className="font-semibold">{activeStage.label}</span> stage.
+                    {" "}
+                    <Link to={activeStage.modulePath} className="font-medium text-cyan-700 hover:text-cyan-800">
+                      Open stage module
+                    </Link>
+                    .
+                  </div>
+                )}
                 <div className="border-t border-slate-200 px-6 py-4">
                   <Link
                     to="/admin/orders"
