@@ -12,10 +12,8 @@ import {
   LayoutDashboard,
   BellRing,
   Map,
-  MapPin,
   Network,
   LogOut,
-  Phone,
   ShieldCheck,
   Smartphone,
   Truck,
@@ -27,7 +25,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
 import { useAdminData } from "@/context/AdminDataContext";
 import { toast } from "@/hooks/use-toast";
-import { ADMIN_LABELS, COMPANY_CONTACT, buildWhatsAppChatUrl } from "@/constants/operations";
+import { ADMIN_LABELS } from "@/constants/operations";
 
 const flowItems = [
   { icon: ClipboardCheck, label: ADMIN_LABELS.customerRequests, path: "/admin/requests" },
@@ -121,43 +119,6 @@ export function AdminSidebar() {
 
       <nav className="flex-1 p-4 overflow-y-auto">
         <div className="mb-6">
-          <div className="flex items-center justify-between px-4 pb-2">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-              Quick Panel
-            </p>
-            {unreadAdminNotifications > 0 && (
-              <span className="rounded-full bg-red-500/20 px-2 py-0.5 text-[10px] font-semibold text-red-200">
-                {unreadAdminNotifications} new
-              </span>
-            )}
-          </div>
-          <div className="mb-4 rounded-xl border border-slate-700/70 bg-slate-900/30 px-4 py-3">
-            <div className="space-y-3">
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500/80">
-                  Office Location
-                </p>
-                <p className="mt-1 flex items-center gap-2 text-sm text-slate-200">
-                  <MapPin className="h-4 w-4 text-emerald-300" />
-                  {COMPANY_CONTACT.officeLocation}
-                </p>
-              </div>
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500/80">
-                  Phone Line
-                </p>
-                <a
-                  href={buildWhatsAppChatUrl("Admin panel contact line")}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-1 inline-flex items-center gap-2 text-sm font-medium text-emerald-300 hover:text-emerald-200"
-                >
-                  <Phone className="h-4 w-4" />
-                  {COMPANY_CONTACT.phoneLine}
-                </a>
-              </div>
-            </div>
-          </div>
           <p className="px-4 pb-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500/80">
             End-to-End Flow
           </p>
