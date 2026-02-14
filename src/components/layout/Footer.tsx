@@ -26,7 +26,7 @@ export function Footer() {
               </div>
             </Link>
             <p className="text-sm text-slate-400 leading-relaxed font-medium">
-              Logistics leader specializing in expert customs clearance and multi-modal transport solutions across Somalia and the East African region.
+              Logistics leader specializing in expert customs clearance and multi-modal transport solutions across the World
             </p>
             <div className="flex gap-4">
               {[Facebook, Twitter, Instagram, Linkedin].map((Icon, i) => (
