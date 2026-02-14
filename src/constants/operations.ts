@@ -18,7 +18,7 @@ export const buildWhatsAppChatUrl = (context?: string) => {
 };
 
 export const ADMIN_LABELS = {
-  cargoControlTower: "Cargo Control Tower",
+  cargoControlTower: "Operations Control Panel",
   customerRequests: "Customer Requests",
   operationsOrders: "Operations Orders",
   shipmentTracking: "Shipment Tracking",
@@ -155,4 +155,3 @@ export const PROCESS_STAGE_CHIPS: ProcessStageChip[] = [
     modulePath: "/admin/process",
   },
 ];
-
